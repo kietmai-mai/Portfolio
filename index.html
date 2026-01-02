@@ -39,7 +39,23 @@
     background-repeat: no-repeat;
     background-attachment: scroll;           /* Critical fix for mobile! */
 }
+/* Add top padding to hero to account for fixed nav */
+section#home {
+    padding-top: 80px;  /* Matches nav height (~64px) + extra space */
+}
 
+/* For smaller screens, reduce if needed */
+@media (max-width: 768px) {
+    section#home {
+        padding-top: 70px;  /* Slightly less on mobile for better fit */
+    }
+}
+
+/* Optional: Make profile image pop more with a subtle glow/shadow */
+.hero-content img[alt="Michael Mai"] {
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);  /* Cyan glow to match your theme */
+    border-color: rgba(0, 255, 255, 0.3);
+}
 /* Mobile optimizations */
 @media (max-width: 768px) {
     .hero-bg {
