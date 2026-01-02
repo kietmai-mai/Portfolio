@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Michael Mai</title>
+    <meta name="description" content="Learn more about Michael Mai's professional background, technical expertise, and leadership philosophy in enterprise technology management.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.min.js"></script>
+    <link href="https://unpkg.com/splitting@1.0.6/dist/splitting.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --navy: #1a2332;
+            --copper: #b87333;
+            --sage: #8fbc8f;
+            --light-gray: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--navy) 0%, #2c3e50 100%);
+            color: #333;
+        }
+        
+        .display-font {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--copper);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .skill-category {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .skill-category:hover {
+            border-color: var(--copper);
+            transform: scale(1.02);
+        }
+        
+        .skill-category.active {
+            border-color: var(--copper);
+            background: linear-gradient(135deg, rgba(184, 115, 51, 0.1), rgba(184, 115, 51, 0.05));
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--copper);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--copper);
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 1.5rem;
+            width: 2px;
+            height: calc(100% - 1rem);
+            background: linear-gradient(to bottom, var(--copper), transparent);
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        
+        .philosophy-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .hero-about {
+            background: linear-gradient(135deg, rgba(26, 35, 50, 0.9), rgba(44, 62, 80, 0.8)), url('./resources/office-workspace.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-sm shadow-sm z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="display-font text-xl font-semibold text-gray-900">
+                    <a href="index.html">Michael Mai</a>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="nav-link text-gray-700 hover:text-gray-900 font-medium">Home</a>
+                    <a href="about.html" class="nav-link text-gray-700 hover:text-gray-900 font-medium">About</a>
+                    <a href="projects.html" class="nav-link text-gray-700 hover:text-gray-900 font-medium">Projects</a>
+                    <a href="contact.html" class="nav-link text-gray-700 hover:text-gray-900 font-medium">Contact</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-gray-900">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:text-gray-900">Home</a>
+                <a href="about.html" class="block px-3 py-2 text-gray-700 hover:text-gray-900">About</a>
+                <a href="projects.html" class="block px-3 py-2 text-gray-700 hover:text-gray-900">Projects</a>
+                <a href="contact.html" class="block px-3 py-2 text-gray-700 hover:text-gray-900">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-about min-h-96 flex items-center justify-center relative">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+            <h1 class="display-font text-5xl md:text-6xl font-bold mb-6" data-splitting>
+                About Michael
+            </h1>
+            <p class="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
+                A passionate technology leader with over 12 years of experience driving enterprise transformation 
+                through innovative cloud solutions and exceptional team leadership.
+            </p>
+        </div>
+    </section>
+
+    <!-- Professional Summary -->
+    <section class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <img src="./resources/profile.jpg" alt="Michael Mai" class="w-80 h-80 rounded-2xl mx-auto shadow-2xl object-cover">
+                </div>
+                <div>
+                    <h2 class="display-font text-4xl font-bold text-gray-900 mb-6">Professional Journey</h2>
+                    <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+                        I'm a results-driven Senior Manager and Technical Program Leader with a proven track record 
+                        in enterprise technology management. My career spans over 12 years at Comcast Corporation, 
+                        where I've evolved from a technical consultant to leading teams of 25+ engineers across 
+                        multiple enterprise-scale platforms.
+                    </p>
+                    <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+                        My expertise lies in AWS Cloud Data Lake architecture, Headwater Streaming DevOps, and 
+                        enterprise project management for platforms like Salesforce.com and Slack. I'm passionate 
+                        about building high-performing teams, implementing robust governance frameworks, and 
+                        driving digital transformation initiatives.
+                    </p>
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        Beyond technical leadership, I'm committed to mentoring engineers, fostering inclusive 
+                        team cultures, and delivering exceptional value to stakeholders through strategic 
+                        technology initiatives.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Skills Assessment -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="display-font text-4xl md:text-5xl font-bold text-gray-900 mb-6" data-splitting>
+                    Technical Expertise
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Explore my technical skills through an interactive assessment. Click on different 
+                    categories to see detailed breakdowns and proficiency levels.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Skills Radar Chart -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Skills Assessment</h3>
+                    <div id="skills-radar" style="width: 100%; height: 400px;"></div>
+                </div>
+                
+                <!-- Skills Categories -->
+                <div class="space-y-4">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Skill Categories</h3>
+                    
+                    <div class="skill-category active bg-white rounded-xl p-6 shadow-sm" data-category="cloud">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-xl font-semibold text-gray-900">Cloud & DevOps</h4>
+                            <span class="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Expert</span>
+                        </div>
+                        <p class="text-gray-600 mb-3">
+                            AWS Cloud Data Lake, Headwater Streaming, CI/CD automation, and infrastructure management.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">AWS</span>
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">DevOps</span>
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">Infrastructure as Code</span>
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">Security</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category bg-white rounded-xl p-6 shadow-sm" data-category="crm">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-xl font-semibold text-gray-900">CRM & Enterprise Systems</h4>
+                            <span class="text-sm bg-green-100 text-green-800 px-3 py-1 rounded-full">Expert</span>
+                        </div>
+                        <p class="text-gray-600 mb-3">
+                            Salesforce platform management, enterprise collaboration tools, and financial systems integration.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">Salesforce</span>
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">Slack</span>
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">Financial Systems</span>
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">Analytics</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category bg-white rounded-xl p-6 shadow-sm" data-category="management">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-xl font-semibold text-gray-900">Project & Team Management</h4>
+                            <span class="text-sm bg-purple-100 text-purple-800 px-3 py-1 rounded-full">Expert</span>
+                        </div>
+                        <p class="text-gray-600 mb-3">
+                            Agile methodologies, team leadership, stakeholder management, and executive reporting.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-sm">Agile/Scrum</span>
+                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-sm">Team Leadership</span>
+                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-sm">Executive Reporting</span>
+                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-sm">Risk Management</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category bg-white rounded-xl p-6 shadow-sm" data-category="analytics">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-xl font-semibold text-gray-900">Analytics & Reporting</h4>
+                            <span class="text-sm bg-orange-100 text-orange-800 px-3 py-1 rounded-full">Advanced</span>
+                        </div>
+                        <p class="text-gray-600 mb-3">
+                            Business intelligence, data visualization, and advanced analytics for executive decision-making.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-sm">Tableau</span>
+                            <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-sm">Oracle BI</span>
+                            <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-sm">Salesforce Analytics</span>
+                            <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-sm">JIRA Intelligence</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leadership Philosophy -->
+    <section class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="display-font text-4xl md:text-5xl font-bold text-gray-900 mb-6" data-splitting>
+                    Leadership Philosophy
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    My approach to technology leadership is built on collaboration, continuous learning, 
+                    and delivering exceptional value to both teams and stakeholders.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="philosophy-card rounded-2xl p-8 text-center">
+                    <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Team Development</h3>
+                    <p class="text-gray-700">
+                        I believe in grooming engineers for career growth, building cultures of accountability, 
+                        and creating environments where teams can achieve excellence through collaboration.
+                    </p>
+                </div>
+                
+                <div class="philosophy-card rounded-2xl p-8 text-center">
+                    <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Continuous Innovation</h3>
+                    <p class="text-gray-700">
+                        Technology evolves rapidly, and I maintain a voracious appetite for learning, 
+                        always eager to expand knowledge across various domains and emerging technologies.
+                    </p>
+                </div>
+                
+                <div class="philosophy-card rounded-2xl p-8 text-center">
+                    <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Customer Excellence</h3>
+                    <p class="text-gray-700">
+                        Every project I undertake focuses on exceeding customer expectations, ensuring 
+                        that our products and services not only meet but surpass stakeholder requirements.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Career Timeline -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="display-font text-4xl md:text-5xl font-bold text-gray-900 mb-6" data-splitting>
+                    Career Journey
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    A timeline of key milestones and achievements throughout my professional career 
+                    in enterprise technology and leadership.
+                </p>
+            </div>
+            
+            <div class="space-y-8">
+                <div class="timeline-item">
+                    <div class="bg-white rounded-xl p-8 shadow-lg card-hover">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900">Manager, Software Development and Engineering</h3>
+                                <p class="text-lg text-gray-600">Comcast Corporation</p>
+                            </div>
+                            <span class="text-sm text-gray-500 bg-gray-200 px-3 py-1 rounded-full">2022 - 2025</span>
+                        </div>
+                        <p class="text-gray-700 mb-4">
+                            Led 25+ engineers across AWS Cloud Data Lake and Headwater Streaming DevOps platforms. 
+                            Managed multi-million dollar projects with expertise in capacity planning, risk controls, 
+                            and executive briefings for major media companies.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">AWS Cloud</span>
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">Team Leadership</span>
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">DevOps</span>
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">Executive Reporting</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="bg-white rounded-xl p-8 shadow-lg card-hover">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900">Lead Program Manager, Salesforce & Slack Enterprise</h3>
+                                <p class="text-lg text-gray-600">Comcast Corporation</p>
+                            </div>
+                            <span class="text-sm text-gray-500 bg-gray-200 px-3 py-1 rounded-full">2015 - 2022</span>
+                        </div>
+                        <p class="text-gray-700 mb-4">
+                            Project managed enterprise Salesforce.com financial applications and Slack Enterprise deployment. 
+                            Led teams through CI/CD processes and managed financial technologies including Oracle BI and Anaplan.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">Salesforce</span>
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">Slack Enterprise</span>
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">Financial Systems</span>
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">Program Management</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="bg-white rounded-xl p-8 shadow-lg card-hover">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900">Consultant, Program and Application</h3>
+                                <p class="text-lg text-gray-600">Comcast Global Audit (CGA)</p>
+                            </div>
+                            <span class="text-sm text-gray-500 bg-gray-200 px-3 py-1 rounded-full">2013 - 2015</span>
+                        </div>
+                        <p class="text-gray-700 mb-4">
+                            Designed and performed IT general controls testing for financial applications, networking, 
+                            databases, and infrastructure. Conducted gap analysis and trend evaluation for eBusiness entities.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-sm">IT Audit</span>
+                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-sm">Risk Management</span>
+                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-sm">Compliance</span>
+                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-sm">Security Testing</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="bg-white rounded-xl p-8 shadow-lg card-hover">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900">Technical Consultant</h3>
+                                <p class="text-lg text-gray-600">Temple University Fox School of Business</p>
+                            </div>
+                            <span class="text-sm text-gray-500 bg-gray-200 px-3 py-1 rounded-full">2010 - 2013</span>
+                        </div>
+                        <p class="text-gray-700 mb-4">
+                            Provided technical support to 154 business faculty members, coordinated data analytics 
+                            training classes, and participated in application development using C# .NET and SQL Server.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-sm">Technical Support</span>
+                            <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-sm">Training & Development</span>
+                            <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-sm">Application Development</span>
+                            <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-sm">Database Management</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="display-font text-2xl font-bold mb-4">Michael Mai</div>
+                <p class="text-gray-400 mb-6">
+                    Senior Manager & Technical Program Leader
+                </p>
+                <div class="flex justify-center space-x-6 mb-6">
+                    <a href="https://www.linkedin.com/in/michael-kiet-mai-826a181a/" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                    <a href="mailto:Kiethmai@gmail.com" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </a>
+                </div>
+                <p class="text-gray-500 text-sm">
+                    © 2026 Michael Mai. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
