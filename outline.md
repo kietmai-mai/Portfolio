@@ -8,7 +8,7 @@
 ├── projects.html           # Projects page with interactive timeline
 ├── contact.html            # Contact page with professional form
 ├── main.js                 # Main JavaScript file with all interactions
-├── resources/              # Local assets folder
+├── Resources/              # Local assets folder
 │   ├── hero-bg.jpg         # Generated hero background image
 │   ├── profile.jpg         # Professional headshot
 │   ├── aws-architecture.jpg # AWS cloud architecture diagram
