@@ -151,23 +151,6 @@
             60% { transform: translateX(-50%) translateY(-5px); }
         }
     </style>
-    .hero-background {
-  background-image: url('your-image-url.jpg');
-  background-size: cover;          /* Scales to fill screen without distortion */
-  background-position: center center; /* Keeps the central hexagon focused */
-  background-repeat: no-repeat;
-  background-attachment: fixed;    /* Optional: parallax effect, but test on mobile */
-  height: 100vh;                   /* Full viewport height */
-  width: 100%;
-}
-
-/* For better mobile cropping if needed */
-@media (max-width: 768px) {
-  .hero-background {
-    background-position: center top;  /* Prioritize top/center on phones */
-    background-attachment: scroll;    /* Fixed can be janky on mobile */
-  }
-}
 </head>
 <body>
     <!-- Navigation -->
