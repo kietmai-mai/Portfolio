@@ -576,15 +576,6 @@ window.addEventListener('load', function() {
         }, index * 100);
     });
 });
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CRZDLKF0QH"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-CRZDLKF0QH');
-</script>
 // Console welcome message
 console.log('%c👋 Hello! Welcome to Michael Mai\'s Portfolio', 'color: #b87333; font-size: 16px; font-weight: bold;');
 console.log('%cFeel free to explore the code and reach out if you have any questions!', 'color: #8fbc8f; font-size: 14px;');
