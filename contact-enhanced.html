@@ -307,9 +307,17 @@
                         </div>
                     </div>
                     
-                    <button class="w-full mt-6 bg-gradient-to-r from-green-600 to-green-700 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-700 hover:to-green-800 transition-all duration-300 transform hover:scale-105" onclick="openConversationalModal()">
-                        Start Conversation
-                    </button>
+                   <button class="w-full mt-6 bg-gradient-to-r from-green-600 to-green-700 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-700 hover:to-green-800 transition-all duration-300 transform hover:scale-105" 
+                onclick="openConversationalWindow()">
+                  Start Conversation
+                </button>
+                        <script>
+                            function openConversationalWindow() {
+                              window.open('conversational-contact.html', 'conversationalChat', 
+                                'width=900,height=700,resizable=yes,scrollbars=yes,status=no,menubar=no,toolbar=no,location=no');
+                                    }
+                </script>
+                    
                 </div>
                 
                 <!-- Traditional Contact Form -->
