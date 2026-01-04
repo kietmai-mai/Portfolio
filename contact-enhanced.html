@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -306,10 +307,9 @@
                         </div>
                     </div>
                     
-             <button class="w-full mt-6 bg-gradient-to-r from-green-600 to-green-700 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-700 hover:to-green-800 transition-all duration-300 transform hover:scale-105" 
-        onclick="openConversationalWindow()">
-  Start Conversation
-</button>
+                    <button class="w-full mt-6 bg-gradient-to-r from-green-600 to-green-700 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-700 hover:to-green-800 transition-all duration-300 transform hover:scale-105" onclick="openConversationalModal()">
+                        Start Conversation
+                    </button>
                 </div>
                 
                 <!-- Traditional Contact Form -->
@@ -452,14 +452,19 @@
             </div>
         </div>
     </section>
-    <script>
-function openConversationalWindow() {
-  window.open('conversational-contact.html', 'conversationalChat', 
-    'width=900,height=700,resizable=yes,scrollbars=yes,status=no,menubar=no,toolbar=no,location=no');
-}
 
- // Remove the modal-related functions if you no longer need them
-</script>
+    <!-- Modal for Conversational Contact -->
+    <div class="modal" id="conversational-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeConversationalModal()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <iframe src="conversational-contact.html" class="iframe-container" width="800" height="600"></iframe>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
