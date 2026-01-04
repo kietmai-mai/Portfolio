@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Contact - Michael Mai</title>
+    <meta name="description" content="Connect with Michael Mai through an enhanced conversational experience or traditional contact form.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.min.js"></script>
+    <link href="https://unpkg.com/splitting@1.0.6/dist/splitting.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --navy: #1a2332;
+            --copper: #b87333;
+            --sage: #8fbc8f;
+            --light-gray: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--navy) 0%, #2c3e50 100%);
+            color: #333;
+        }
+        
+        .display-font {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--copper);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .hero-contact {
+            background: linear-gradient(135deg, rgba(26, 35, 50, 0.9), rgba(44, 62, 80, 0.8)), url('./resources/office-workspace.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        .contact-option {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .contact-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: var(--copper);
+        }
+        
+        .contact-option.active {
+            border-color: var(--copper);
+            background: linear-gradient(135deg, rgba(184, 115, 51, 0.05), rgba(143, 188, 143, 0.05));
+        }
+        
+        .conversational-preview {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 1.5rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .chat-bubble {
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 18px;
+            max-width: 80%;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .chat-bubble.bot {
+            background: white;
+            border: 1px solid #e5e7eb;
+            margin-right: auto;
+        }
+        
+        .chat-bubble.user {
+            background: var(--copper);
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+        
+        .feature-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            background: var(--light-gray);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin: 0.25rem;
+        }
+        
+        .feature-badge.conversational {
+            background: linear-gradient(135deg, var(--sage), #a8d4a8);
+            color: white;
+        }
+        
+        .feature-badge.traditional {
+            background: linear-gradient(135deg, var(--copper), #d4a574);
+            color: white;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0,0,0,0.1);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: background 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            background: rgba(0,0,0,0.2);
+        }
+        
+        .iframe-container {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .availability-indicator {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--sage), #a8d4a8);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .availability-indicator::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-sm shadow-sm z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="display-font text-xl font-semibold text-gray-900">
+                    <a href="index.html">Michael Mai</a>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="nav-link text-gray-700 hover:text-gray-900 font-medium">Home</a>
+                    <a href="about.html" class="nav-link text-gray-700 hover:text-gray-900 font-medium">About</a>
+                    <a href="projects.html" class="nav-link text-gray-700 hover:text-gray-900 font-medium">Projects</a>
+                    <a href="contact-enhanced.html" class="nav-link text-gray-700 hover:text-gray-900 font-medium">Contact</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-gray-900">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:text-gray-900">Home</a>
+                <a href="about.html" class="block px-3 py-2 text-gray-700 hover:text-gray-900">About</a>
+                <a href="projects.html" class="block px-3 py-2 text-gray-700 hover:text-gray-900">Projects</a>
+                <a href="contact-enhanced.html" class="block px-3 py-2 text-gray-700 hover:text-gray-900">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-contact min-h-96 flex items-center justify-center relative">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+            <h1 class="display-font text-5xl md:text-6xl font-bold mb-6" data-splitting>
+                Let's Connect
+            </h1>
+            <p class="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
+                Choose how you'd like to get in touch - through an engaging conversation or a traditional contact form.
+            </p>
+        </div>
+    </section>
+
+    <!-- Contact Options -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="display-font text-4xl md:text-5xl font-bold text-gray-900 mb-6" data-splitting>
+                    Choose Your Experience
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    I've designed two ways for us to connect - pick the one that feels most comfortable for you.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+                <!-- Conversational Contact -->
+                <div class="contact-option" id="conversational-option">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mr-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Conversational Contact</h3>
+                            <p class="text-gray-600">Have a natural conversation</p>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-700 mb-6">
+                        Experience an interactive, conversational approach where I'll ask you questions and guide you through providing the information I need to help you effectively.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="feature-badge conversational">Interactive Experience</span>
+                        <span class="feature-badge conversational">Guided Questions</span>
+                        <span class="feature-badge conversational">Natural Flow</span>
+                        <span class="feature-badge conversational">Real-time Responses</span>
+                    </div>
+                    
+                    <div class="conversational-preview">
+                        <div class="chat-bubble bot">
+                            Hello! I'm Michael. I'd love to learn more about you and how I can help. What's your name?
+                        </div>
+                        <div class="chat-bubble user">
+                            Hi Michael, I'm Sarah from TechCorp
+                        </div>
+                        <div class="chat-bubble bot">
+                            Nice to meet you, Sarah! What's your email address so I can get back to you?
+                        </div>
+                    </div>
+                    
+                    <button class="w-full mt-6 bg-gradient-to-r from-green-600 to-green-700 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-700 hover:to-green-800 transition-all duration-300 transform hover:scale-105" onclick="openConversationalModal()">
+                        Start Conversation
+                    </button>
+                </div>
+                
+                <!-- Traditional Contact Form -->
+                <div class="contact-option" id="traditional-option">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mr-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Traditional Form</h3>
+                            <p class="text-gray-600">Classic contact form</p>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-700 mb-6">
+                        Prefer a traditional approach? Use the standard contact form with all fields at once. Perfect if you know exactly what you want to say.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="feature-badge traditional">All Fields Visible</span>
+                        <span class="feature-badge traditional">Quick Entry</span>
+                        <span class="feature-badge traditional">Familiar Format</span>
+                        <span class="feature-badge traditional">Direct Input</span>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="bg-gray-100 p-3 rounded-lg text-sm text-gray-600">First Name</div>
+                            <div class="bg-gray-100 p-3 rounded-lg text-sm text-gray-600">Last Name</div>
+                        </div>
+                        <div class="bg-gray-100 p-3 rounded-lg text-sm text-gray-600">Email Address</div>
+                        <div class="bg-gray-100 p-3 rounded-lg text-sm text-gray-600">Company (Optional)</div>
+                        <div class="bg-gray-100 p-3 rounded-lg text-sm text-gray-600">Subject</div>
+                        <div class="bg-gray-100 p-3 rounded-lg text-sm text-gray-600 h-20">Your message...</div>
+                    </div>
+                    
+                    <button class="w-full mt-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105" onclick="window.location.href='contact.html'">
+                        Use Contact Form
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Availability & Response Time -->
+            <div class="bg-gray-50 rounded-2xl p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Current Availability</h3>
+                        <div class="availability-indicator mb-4">
+                            Available for new opportunities
+                        </div>
+                        <p class="text-gray-600">
+                            I'm currently open to discussing leadership opportunities, consulting projects, and collaborative initiatives in enterprise technology and cloud architecture.
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Response Time</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600">Professional Inquiries</span>
+                                <span class="font-semibold text-gray-900">Within 24 hours</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600">Collaboration Requests</span>
+                                <span class="font-semibold text-gray-900">Within 48 hours</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600">Speaking Engagements</span>
+                                <span class="font-semibold text-gray-900">Within 72 hours</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Direct Contact Options -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="display-font text-4xl md:text-5xl font-bold text-gray-900 mb-6" data-splitting>
+                    Direct Contact
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Prefer to reach out directly? Here are all the ways you can connect with me.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Email Contact -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mr-4">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900">Email</h3>
+                            <p class="text-gray-600">Direct email communication</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4">
+                        For detailed discussions, project proposals, or formal inquiries, email is often the best way to reach me.
+                    </p>
+                    <a href="mailto:kiethmai@gmail.com" class="inline-flex items-center text-green-600 hover:text-green-700 font-medium">
+                        kiethmai@gmail.com
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+                
+                <!-- LinkedIn Contact -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mr-4">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900">LinkedIn</h3>
+                            <p class="text-gray-600">Professional networking</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4">
+                        Connect with me on LinkedIn for professional networking, industry discussions, and career opportunities.
+                    </p>
+                    <a href="https://www.linkedin.com/in/michael-kiet-mai-826a181a/" target="_blank" class="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium">
+                        Connect on LinkedIn
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal for Conversational Contact -->
+    <div class="modal" id="conversational-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeConversationalModal()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <iframe src="conversational-contact.html" class="iframe-container" width="800" height="600"></iframe>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="display-font text-2xl font-bold mb-4">Michael Mai</div>
+                <p class="text-gray-400 mb-6">
+                    Senior Manager & Technical Program Leader
+                </p>
+                <div class="flex justify-center space-x-6 mb-6">
+                    <a href="https://www.linkedin.com/in/michael-kiet-mai-826a181a/" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                    <a href="mailto:Kiethmai@gmail.com" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </a>
+                </div>
+                <p class="text-gray-500 text-sm">
+                    © 2026 Michael Mai. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Modal functionality
+        function openConversationalModal() {
+            const modal = document.getElementById('conversational-modal');
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeConversationalModal() {
+            const modal = document.getElementById('conversational-modal');
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('conversational-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeConversationalModal();
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeConversationalModal();
+            }
+        });
+        
+        // Highlight selected contact option
+        const conversationalOption = document.getElementById('conversational-option');
+        const traditionalOption = document.getElementById('traditional-option');
+        
+        conversationalOption.addEventListener('click', function() {
+            this.classList.add('active');
+            traditionalOption.classList.remove('active');
+        });
+        
+        traditionalOption.addEventListener('click', function() {
+            this.classList.add('active');
+            conversationalOption.classList.remove('active');
+        });
+        
+        // Mobile menu functionality
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        
+        // Close mobile menu when clicking on links
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
